@@ -1,4 +1,4 @@
-# Aquaculture Vision Demo
+# AIC Hackathon - Aquaculture Vision Demo
 
 Interactive instance-segmentation video demo for fish monitoring. Hover or click a fish to see its colored mask and metrics. Built with React + TypeScript + Vite. No backend required.
 
