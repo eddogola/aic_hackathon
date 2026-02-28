@@ -1,0 +1,24 @@
+{
+  "chunkIndex": 6,
+  "chunkStartSec": 12,
+  "chunkEndSec": 12.61,
+  "fps": 5,
+  "frames": [
+    {
+      "t": 12.0,
+      "instances": []
+    },
+    {
+      "t": 12.2,
+      "instances": []
+    },
+    {
+      "t": 12.4,
+      "instances": []
+    },
+    {
+      "t": 12.6,
+      "instances": []
+    }
+  ]
+}
