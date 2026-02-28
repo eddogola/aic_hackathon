@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frame Dimension Measurement</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .layout { 
+            display: flex; 
+            height: 100vh; 
+            background: #1a1a1a; 
+        }
+        .center-column { 
+            flex: 1; 
+            padding: 8px 14px; 
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .right-sidebar { 
+            width: 500px; 
+            background: #2a2a2a; 
+            border-left: 1px solid #333;
+        }
+        .header { 
+            height: 80px; 
+            background: #333; 
+            margin-bottom: 8px;
+        }
+        .video-container { 
+            flex: 1; 
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 0;
+        }
+        .controls { 
+            height: 60px; 
+            background: #333; 
+            margin-top: 8px;
+        }
+        .dimensions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #00ff00;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        .video-area {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #ff0000;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="center-column">
+            <div class="header"></div>
+            <div class="video-container" id="videoContainer">
+                <div class="dimensions" id="dimensions">
+                    Measuring...
+                </div>
+                <div class="video-area" id="videoArea"></div>
+            </div>
+            <div class="controls"></div>
+        </div>
+        <div class="right-sidebar"></div>
+    </div>
+
+    <script>
+        function updateDimensions() {
+            const container = document.getElementById('videoContainer');
+            const area = document.getElementById('videoArea');
+            const dimensions = document.getElementById('dimensions');
+            
+            const containerRect = container.getBoundingClientRect();
+            const areaRect = area.getBoundingClientRect();
+            
+            // Calculate available space accounting for padding
+            const availableWidth = containerRect.width;
+            const availableHeight = containerRect.height;
+            
+            // Calculate optimal video dimensions for different aspect ratios
+            const current720x1080 = {
+                width: Math.min(availableWidth, (availableHeight * 720) / 1080),
+                height: Math.min(availableHeight, (availableWidth * 1080) / 720)
+            };
+            
+            const optimal16x9 = {
+                width: Math.min(availableWidth, (availableHeight * 16) / 9),
+                height: Math.min(availableHeight, (availableWidth * 9) / 16)
+            };
+            
+            const optimal4x3 = {
+                width: Math.min(availableWidth, (availableHeight * 4) / 3),
+                height: Math.min(availableHeight, (availableWidth * 3) / 4)
+            };
+            
+            dimensions.innerHTML = `
+                <strong>Video Container Dimensions:</strong><br>
+                Available: ${availableWidth.toFixed(0)}px × ${availableHeight.toFixed(0)}px<br><br>
+                
+                <strong>Current 720×1080 (2:3):</strong><br>
+                Video size: ${current720x1080.width.toFixed(0)}px × ${current720x1080.height.toFixed(0)}px<br>
+                Utilization: ${((current720x1080.width * current720x1080.height) / (availableWidth * availableHeight) * 100).toFixed(1)}%<br><br>
+                
+                <strong>Optimal 16:9 (landscape):</strong><br>
+                Video size: ${optimal16x9.width.toFixed(0)}px × ${optimal16x9.height.toFixed(0)}px<br>
+                Utilization: ${((optimal16x9.width * optimal16x9.height) / (availableWidth * availableHeight) * 100).toFixed(1)}%<br><br>
+                
+                <strong>Optimal 4:3 (standard):</strong><br>
+                Video size: ${optimal4x3.width.toFixed(0)}px × ${optimal4x3.height.toFixed(0)}px<br>
+                Utilization: ${((optimal4x3.width * optimal4x3.height) / (availableWidth * availableHeight) * 100).toFixed(1)}%<br><br>
+                
+                <strong>Recommended for max fill:</strong><br>
+                ${availableWidth > availableHeight ? 
+                    `${availableWidth.toFixed(0)}×${(availableWidth * 9/16).toFixed(0)} (16:9 landscape)` :
+                    `${(availableHeight * 4/3).toFixed(0)}×${availableHeight.toFixed(0)} (4:3 portrait)`
+                }
+            `;
+        }
+        
+        // Update on load and resize
+        window.addEventListener('load', updateDimensions);
+        window.addEventListener('resize', updateDimensions);
+        
+        // Update every 100ms to catch any dynamic changes
+        setInterval(updateDimensions, 100);
+    </script>
+</body>
+</html>

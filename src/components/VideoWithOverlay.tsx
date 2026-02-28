@@ -7,7 +7,7 @@ import FishTooltip from './FishTooltip';
 
 /**
  * Compute the actual rendered rectangle of a video within its container
- * when using object-fit: contain. The video may have letterbox bars.
+ * when using object-fit: cover. The video fills the entire container and may be cropped.
  */
 function getVideoDisplayRect(video: HTMLVideoElement): { x: number; y: number; w: number; h: number } {
   const containerW = video.clientWidth || 1;
@@ -21,17 +21,17 @@ function getVideoDisplayRect(video: HTMLVideoElement): { x: number; y: number; w
   let renderW: number, renderH: number, offsetX: number, offsetY: number;
 
   if (videoAspect > containerAspect) {
-    // Video is wider than container — pillarbox (bars top/bottom)
-    renderW = containerW;
-    renderH = containerW / videoAspect;
-    offsetX = 0;
-    offsetY = (containerH - renderH) / 2;
-  } else {
-    // Video is taller than container — letterbox (bars left/right)
+    // Video is wider than container — crop left/right, fill height
     renderH = containerH;
     renderW = containerH * videoAspect;
     offsetX = (containerW - renderW) / 2;
     offsetY = 0;
+  } else {
+    // Video is taller than container — crop top/bottom, fill width
+    renderW = containerW;
+    renderH = containerW / videoAspect;
+    offsetX = 0;
+    offsetY = (containerH - renderH) / 2;
   }
 
   return { x: offsetX, y: offsetY, w: renderW, h: renderH };

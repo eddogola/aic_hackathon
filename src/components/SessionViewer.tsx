@@ -7,7 +7,7 @@ import StatsPanel from './StatsPanel';
 import FishTable from './FishTable';
 import TimelineScrubber from './TimelineScrubber';
 
-const VIDEO_SRC = '/demo/video.mp4';
+const VIDEO_SRC = '/demo/video1.mp4';
 /** Max age (seconds) to carry forward annotations when current frame is empty */
 const PERSIST_WINDOW = 1.0;
 
